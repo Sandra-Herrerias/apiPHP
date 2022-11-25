@@ -17,7 +17,8 @@ class EmployeeModel extends Model
     protected $allowedFields    = [
         'name',
 		'email',
-		'phone_no'
+		'phone_no',
+        'age'
     ];
 
     // Dates

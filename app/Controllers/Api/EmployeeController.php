@@ -4,6 +4,7 @@ namespace App\Controllers\Api;
 
 use CodeIgniter\RESTful\ResourceController;
 use App\Models\EmployeeModel;
+use \App\Validation\CustomRules;
 
 class EmployeeController extends ResourceController
 {
@@ -13,6 +14,7 @@ class EmployeeController extends ResourceController
 			"name" => "required",
 			"email" => "required|valid_email|is_unique[employees.email]|min_length[6]",
 			"phone_no" => "required",
+			"age" => "required|ageValidation"
 		];
 
 		$messages = [
@@ -26,6 +28,10 @@ class EmployeeController extends ResourceController
 			],
 			"phone_no" => [
 				"required" => "Phone Number is required"
+			],
+			"age" => [
+				"required" => "Age is required",
+				"ageValidation" => "Ha de ser major d'edat"
 			],
 		];
 
@@ -44,6 +50,7 @@ class EmployeeController extends ResourceController
 			$data['name'] = $this->request->getVar("name");
 			$data['email'] = $this->request->getVar("email");
 			$data['phone_no'] = $this->request->getVar("phone_no");
+			$data['age'] = $this->request->getVar("age");
 
 			$emp->save($data);
 
@@ -107,8 +114,9 @@ class EmployeeController extends ResourceController
 	{
 		$rules = [
 			"name" => "required",
-			"email" => "required|valid_email|min_length[6]",
+			"email" => "required|valid_email|is_unique[employees.email]|min_length[6]",
 			"phone_no" => "required",
+			"age" => "required|ageValidation"
 		];
 
 		$messages = [
@@ -117,10 +125,15 @@ class EmployeeController extends ResourceController
 			],
 			"email" => [
 				"required" => "Email required",
-				"valid_email" => "Email address is not in format"
+				"valid_email" => "Email address is not in format",
+				"is_unique" => "Email address already exists"
 			],
 			"phone_no" => [
 				"required" => "Phone Number is required"
+			],
+			"age" => [
+				"required" => "Age is required",
+				"ageValidation" => "Ha de ser major d'edat"
 			],
 		];
 
@@ -138,9 +151,17 @@ class EmployeeController extends ResourceController
 
 			if ($emp->find($emp_id)) {
 
-				$data['name'] = $this->request->getVar("name");
+				/*$data['name'] = $this->request->getVar("name");
 				$data['email'] = $this->request->getVar("email");
 				$data['phone_no'] = $this->request->getVar("phone_no");
+				$data['age'] = $this->request->getVar("age");*/
+
+				$input = $this->request->getRawInput();
+
+                $data['name'] = $input["name"];
+                $data['email'] = $input["email"];
+                $data['phone_no'] = $input["phone_no"];
+                $data['age'] = $input["age"];
 
 				$emp->update($emp_id, $data);
 
