@@ -48,6 +48,15 @@ $routes->group("api", ["namespace" => "App\Controllers\Api"] , function($routes)
        $routes->delete("delete/(:num)", "EmployeeController::deleteEmployee/$1");
     });
 
+    $routes->group("book", function($routes){
+        $routes->get("list", "BookController::list");
+        $routes->post("add", "BookController::add");
+        $routes->get("show/(:num)", "BookController::show/$1");
+        $routes->put("update/(:num)", "BookController::update/$1");
+        $routes->delete("delete/(:num)", "BookController::delete/$1");
+     });
+ 
+
     $routes->post("register", "UserController::register");
     $routes->post("login", "UserController::login");
     $routes->get("profile", "UserController::details");
